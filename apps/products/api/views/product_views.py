@@ -2,14 +2,17 @@ from rest_framework import generics
 from rest_framework import status
 from rest_framework.response import Response
 
-from apps.base.api import GeneralListAPIView
+#from apps.base.api import GeneralListAPIView
 from apps.products.api.serializers.product_serializers import ProductSerializer
 
+"""
+Se usa solo para listar
 class ProductListAPIView(GeneralListAPIView):
     serializer_class = ProductSerializer
-
-class ProductCreateAPIView(generics.CreateAPIView):
+"""
+class ProductListCreateAPIView(generics.ListCreateAPIView):
     serializer_class = ProductSerializer
+    queryset = ProductSerializer.Meta.model.objects.filter(state=True)
 
     # No es necesio sobreescribir el método al heredar de CreateAPIView
     def post(self, request):
