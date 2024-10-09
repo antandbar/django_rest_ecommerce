@@ -26,7 +26,7 @@ class ProductViewSet(viewsets.ModelViewSet):
             return Response({'message': ' Producto creado correctamente!'}, status = status.HTTP_201_CREATED)
         return Response(serializer.errors, status = status.HTTP_400_BAD_REQUEST)
 
-    def update(self,rquest,pk=None):
+    def update(self,request,pk=None):
         if self.get_queryset(pk):
             product_serializer = self.serializer_class(self.get_queryset(pk),data = request.data)
             if product_serializer.is_valid():
