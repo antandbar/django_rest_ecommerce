@@ -53,10 +53,9 @@ class Login(ObtainAuthToken):
         return Response({'mensaje':'Hola desde response'}, status = status.HTTP_200_OK)
     
 class logout(APIView):
-    # Se genera get con el ejemplo
-    def get(self, request, *args, **kwargs):
+    def post(self, request, *args, **kwargs):
         try:
-            token = request.GET.get('token')
+            token = request.POST.get('token')
             token = Token.objects.filter(key = token).first()
        
             if token:
