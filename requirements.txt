@@ -4,4 +4,5 @@ djangorestframework==3.14.0
 django-simple-history==3.7.0
 Pillow==10.4.0
 drf-yasg==1.21.7
+django-cors-headers==4.0.0
 
