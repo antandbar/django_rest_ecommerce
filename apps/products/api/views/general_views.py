@@ -95,14 +95,14 @@ class CategoryProductViewSet(viewsets.GenericViewSet):
     
     def update(self, request, pk=None):
         if self.get_object().exists():    
-            serializer = self.serializer_class(isinstance=self.get_object().get(), data=request.data) 
+            serializer = self.serializer_class(self.get_object().get(), data=request.data) 
             if serializer.is_valid():
                 serializer.save()
                 return Response({'message': 'Categoría actualizada correctamente'}, status=status.HTTP_200_OK)
         return Response({'message':'','error':serrializer.errors},status=status.HTTP_400_BAD_REQUEST)       
 
     def destroy(self, request, pk=None):
-        if self.get_object.exist():
+        if self.get_object().exists():
             self.get_object().get().delete()
             return Response({'message': 'Categoría actualizada correctamente'}, status=status.HTTP_200_OK)
         return Response({'message':'','error':'Categoría no encontada'},status=status.HTTP_400_BAD_REQUEST)       
