@@ -12,6 +12,8 @@ from apps.users.authentication_mixins import Authentication
 from apps.users.api.serializers import UserTokenSerializer
 
 class UserToken(Authentication,APIView):
+    authentication_classes = ()
+    permission_classes = ()
     def get(self, request, *args, **kwargs):
         """
         Validate Token
@@ -30,6 +32,8 @@ class UserToken(Authentication,APIView):
             }, status=status.HTTP_400_BAD_REQUEST)
 
 class Login(ObtainAuthToken):
+    authentication_classes = ()
+    permission_classes = ()
 
     def post(self, request, *args, **kwargs):
         login_serializer = self.serializer_class(data = request.data, context = {'request': request})
@@ -72,6 +76,8 @@ class Login(ObtainAuthToken):
         return Response({'mensaje':'Hola desde response'}, status = status.HTTP_200_OK)
     
 class logout(APIView):
+    authentication_classes = ()
+    permission_classes = ()
     def post(self, request, *args, **kwargs):
         try:
             token = request.POST.get('token')

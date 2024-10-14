@@ -6,7 +6,7 @@ from rest_framework.response import Response
 from apps.users.authentication_mixins import Authentication
 from apps.products.api.serializers.product_serializers import ProductSerializer
 
-class ProductViewSet(Authentication,viewsets.ModelViewSet):
+class ProductViewSet(viewsets.ModelViewSet):
     serializer_class = ProductSerializer
     queryset = ProductSerializer.Meta.model.objects.filter(state=True)
 

@@ -1,11 +1,11 @@
-from rest_framework import status
+from rest_framework import status, authentication, exceptions
 from rest_framework.authentication import get_authorization_header
 from rest_framework.renderers import JSONRenderer
 from rest_framework.response import Response
 
 from apps.users.authentication import ExpiringTokenAuthentication
 
-class Authentication(object):
+class Authentication(authentication.BaseAuthentication):
     user = None
 
     def get_user(self, request):
@@ -24,13 +24,21 @@ class Authentication(object):
                        
         return None
 
-
+    def authenticate(self, request):
+        self.get_user(request)
+        if self.user is None:
+            raise exceptions.AuthenticationFailed('No se han enviado las credenciales')
+        return (self.user, None)
+    
+    """
+    El dispacth se utiliza cuando utilizamos un mixin
     def dispatch(self, request, *args, **kwargs):
         user = self.get_user(request)
         # Se encontró un token en la petición
         if user is not None:
             return super().dispatch(request, *args, **kwargs)
-            """
+    
+            
             if type(user) == str:
                 response =  Response({
                     'error': user,
@@ -43,7 +51,7 @@ class Authentication(object):
             
             if not self.user_token_expired:
                 return super().dispatch(request, *args, **kwargs)
-            """
+            
         
         response =  Response({
             'error': 'No se han enviado las credenciales',
@@ -54,3 +62,4 @@ class Authentication(object):
         response.renderer_context = {}
         return response
 
+    """
