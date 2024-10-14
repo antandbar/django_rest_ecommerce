@@ -18,7 +18,7 @@ class Login(TokenObtainPairView):
 
     def post(self, request, *args, **kwargs):
         username = request.data.get('username', '')
-        password = request.data. get('password', '')
+        password = request.data.get('password', '')
         user = authenticate(
             username=username,
             password=password
@@ -39,8 +39,10 @@ class Login(TokenObtainPairView):
     
 class Logout(GenericAPIView):
     def post(self, request, *args, **kwargs):
-        user = User.objects.filter(id=request.data.get('user', '')).first()
+        # Si no encuentra user manda 0
+        user = User.objects.filter(id=request.data.get('user', 0))
         if user.exists():
+            # Genera un nuevo refresh token y cierra la sesión
             RefreshToken.for_user(user.first())
             return Response({'message':'Sesión cerrada correctamente',}, status=status.HTTP_200_OK)
         return Response({'error':'No existe este usuario',}, status=status.HTTP_200_OK)
