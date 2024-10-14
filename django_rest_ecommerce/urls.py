@@ -6,6 +6,11 @@ from rest_framework import permissions
 from drf_yasg.views import get_schema_view
 from drf_yasg import openapi
 
+from rest_framework_simplejwt.views import (
+    TokenObtainPairView,
+    TokenRefreshView,
+)
+
 from apps.users.views import Login, logout, UserToken
 
 schema_view = get_schema_view(
@@ -29,7 +34,9 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('logout/', logout.as_view(), name = 'logout'),
     path('login/',Login.as_view(), name = 'login'),
-    path('refresh-token/', UserToken.as_view(), name = 'refresh_token'),
+    path('api/token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
+    path('api/token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
+    #path('refresh-token/', UserToken.as_view(), name = 'refresh_token'),
     path('usuario/', include('apps.users.api.urls')),
     #path('products/', include('apps.products.api.urls')),
     path('products/', include('apps.products.api.routers')),
