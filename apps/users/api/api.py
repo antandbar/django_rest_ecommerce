@@ -2,10 +2,10 @@ from django.shortcuts import get_object_or_404
 
 from rest_framework import status
 from rest_framework.response import Response
+from rest_framework.decorators import action
 from rest_framework import viewsets
-from rest_framework.decorators import api_view
 from apps.users.models import User
-from apps.users.api.serializers import UserSerializer, UserListSerializer, updateUserSerializer
+from apps.users.api.serializers import UserSerializer, UserListSerializer, UpdateUserSerializer, PasswordSerializer
 
 # Hereda de apiView, no tiene ninguna acción predeterminada, no crea por defecto nada
 class UserViewSet(viewsets.GenericViewSet):
@@ -23,6 +23,22 @@ class UserViewSet(viewsets.GenericViewSet):
     
     def get_object(self, pk):
         return get_object_or_404(self.model, pk=pk)
+    
+    # Detail dice que es una ruta de detalle y agrega id
+    @action(detail=True, methods=['post'])
+    def set_password(self, request, pk=None):
+        user = self.get_object(pk)
+        password_serializer = PasswordSerializer(data=request.data)
+        if password_serializer.is_valid():
+            user.set_password(password_serializer.validated_data['password'])
+            user.save()
+            return Response({
+                'message': 'Contraseña actualizada correctamente'
+            })
+        return Response ({
+            'message': 'Hay errores en la información enviada',
+            'errors': password_serializer.errors
+        }, status=status.HTTP_400_BAD_REQUEST)
         
     def list(self, request):
         users = self.get_queryset()
@@ -49,7 +65,7 @@ class UserViewSet(viewsets.GenericViewSet):
     
     def update(self, request, pk=None):
         user = self.get_object(pk)
-        user_serializer = updateUserSerializer(user, data=request.data)
+        user_serializer = UpdateUserSerializer(user, data=request.data)
         if user_serializer.is_valid():
             user_serializer.save()
             return Response({
