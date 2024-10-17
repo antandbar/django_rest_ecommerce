@@ -28,7 +28,6 @@ class ProductViewSet(viewsets.ModelViewSet):
     def create(self,request):
         data = validate_files(request.data, 'image')
         serializer = self.serializer_class(data = data)
-        request.data._mutable = False
         if serializer.is_valid():
             serializer.save()
             return Response({'message': ' Producto creado correctamente!'}, status = status.HTTP_201_CREATED)

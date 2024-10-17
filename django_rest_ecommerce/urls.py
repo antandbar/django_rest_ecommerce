@@ -43,6 +43,7 @@ urlpatterns = [
     path('users/', include('apps.users.api.routers')),
     #path('products/', include('apps.products.api.urls')),
     path('products/', include('apps.products.api.routers')),
+    path('expense/', include('apps.expense_manager.api.routers')),
 ]
 
 urlpatterns += [
